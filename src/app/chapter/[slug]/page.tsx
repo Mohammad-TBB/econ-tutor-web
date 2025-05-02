@@ -4,9 +4,12 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
-export default async function ChapterPage({ params }: { params: { slug: string } }) {
-  const chapter = await getChapter(params.slug);
-  const contentBlocks = chapter.fields.content?.content || [];
+type Props = {
+  params: { slug: string };
+};
+
+export default async function ChapterPage({ params }: Props) {
+
 
   const getTextContent = (node: any): string => {
     if (!node) return '';
