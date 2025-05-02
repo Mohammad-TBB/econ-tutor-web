@@ -4,12 +4,25 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
 
-type Props = {
-  params: { slug: string };
-};
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
 
-export default async function ChapterPage({ params }: Props) {
+export default async function ChapterPage({ params }: PageProps) {
+  const chapter = await getChapter(params.slug);
 
+  const title =
+    typeof chapter?.fields?.Title === 'string'
+      ? chapter.fields.Title
+      : 'Untitled Chapter';
+
+  // Ensure .content is a rich text object
+  const contentBlocks =
+    Array.isArray((chapter?.fields?.content as any)?.content)
+      ? (chapter.fields.content as any).content
+      : [];
 
   const getTextContent = (node: any): string => {
     if (!node) return '';
@@ -20,7 +33,7 @@ export default async function ChapterPage({ params }: Props) {
 
   return (
     <main className="p-6">
-      <h1 className="text-2xl font-bold mb-4">{chapter.fields.title}</h1>
+      <h1 className="text-2xl font-bold mb-4">{title}</h1>
       {contentBlocks.map((block: any, index: number) => (
         <ReactMarkdown
           key={index}
