@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
+import { Metadata } from 'next';
 
 export async function generateStaticParams() {
   const chapters = await getAllChapters();
@@ -14,13 +15,21 @@ export async function generateStaticParams() {
   });
 }
 
-interface PageProps {
-  params: {
-    slug: string;
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  return {
+    title: `Chapter - ${params.slug}`,
   };
 }
 
-export default async function ChapterPage({ params }: PageProps) {
+export default async function ChapterPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const chapter = await getChapter(params.slug);
 
   const title =
