@@ -1,8 +1,18 @@
-import { getChapter } from '@/lib/contentful';
+import { getChapter, getAllChapters } from '@/lib/contentful';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css';
+
+export async function generateStaticParams() {
+  const chapters = await getAllChapters();
+
+  return chapters.map((chapter: any) => {
+    const title = chapter.fields?.Title || 'untitled';
+    const slug = title.replace(/\s+/g, '-').toLowerCase();
+    return { slug };
+  });
+}
 
 interface PageProps {
   params: {
@@ -18,7 +28,6 @@ export default async function ChapterPage({ params }: PageProps) {
       ? chapter.fields.Title
       : 'Untitled Chapter';
 
-  // Ensure .content is a rich text object
   const contentBlocks =
     Array.isArray((chapter?.fields?.content as any)?.content)
       ? (chapter.fields.content as any).content
