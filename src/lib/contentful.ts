@@ -13,8 +13,8 @@ export async function getAllChapters() {
 
 export async function getChapter(slug: string) {
   const entries = await client.getEntries({
-    content_type: 'chapter',
-    'fields.title': slug.replace(/-/g, ' '),
+    content_type: 'Chapter',
+    'fields.Title': slug.replace(/-/g, ' '),
   });
   return entries.items[0];
 }
