@@ -14,9 +14,11 @@ export async function generateStaticParams() {
   });
 }
 
-export default async function ChapterPage({ params }: { params: Record<string, string> }) {
-  const slug = params.slug;
-  const chapter = await getChapter(slug);
+// 🟢 Don't type the param here!
+export default async function ChapterPage(props: any) {
+  const params: { slug: string } = props.params;
+
+  const chapter = await getChapter(params.slug);
 
   const title =
     typeof chapter?.fields?.Title === 'string'
